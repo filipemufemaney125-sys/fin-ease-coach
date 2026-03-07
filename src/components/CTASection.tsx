@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTASection = () => {
   return (
@@ -16,8 +17,8 @@ const CTASection = () => {
           <p className="text-secondary-foreground/60 font-body text-lg md:text-xl mb-10 max-w-xl mx-auto">
             Não espere mais. Cada dia sem educação financeira é um dia de oportunidades perdidas. Comece hoje.
           </p>
-          <Button variant="hero" size="lg" className="h-16 px-12 rounded-full text-lg gap-3">
-            Comece hoje <ArrowRight className="w-5 h-5" />
+          <Button variant="hero" size="lg" className="h-16 px-12 rounded-full text-lg gap-3" asChild>
+            <Link to="/checkout">Comece hoje <ArrowRight className="w-5 h-5" /></Link>
           </Button>
           <p className="text-secondary-foreground/40 font-body text-sm mt-6">
             Acesso imediato · Suporte dedicado · Garantia de satisfação
