@@ -1,5 +1,6 @@
 import heroImg from "@/assets/hero-finance.jpg";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -25,8 +26,8 @@ const HeroSection = () => {
             Aprenda a controlar o seu dinheiro, eliminar dívidas e começar a investir com um método simples e prático que já mudou a vida de centenas de pessoas.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button variant="hero" size="lg" className="h-14 px-10 rounded-full text-lg">
-              Inscreva-se agora
+            <Button variant="hero" size="lg" className="h-14 px-10 rounded-full text-lg" asChild>
+              <Link to="/checkout">Inscreva-se agora</Link>
             </Button>
             <Button variant="heroOutline" size="lg" className="h-14 px-10 rounded-full text-lg border-secondary-foreground/30 text-secondary-foreground hover:bg-secondary-foreground hover:text-secondary">
               Saiba mais
