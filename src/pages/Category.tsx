@@ -1,16 +1,21 @@
 import { useParams, Navigate, Link } from "react-router-dom";
+import { Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import PageShell from "@/components/site/PageShell";
 import SEO from "@/components/site/SEO";
 import ArticleCard from "@/components/site/ArticleCard";
 import Sidebar from "@/components/site/Sidebar";
 import { categories } from "@/data/categories";
-import { getPostsByCategory } from "@/data/posts";
+import { fetchArticles } from "@/lib/articles";
 
 const Category = () => {
   const { slug } = useParams();
   const cat = categories.find((c) => c.slug === slug);
   if (!cat) return <Navigate to="/blog" replace />;
-  const posts = getPostsByCategory(cat.slug);
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ["articles", "cat", cat.slug],
+    queryFn: () => fetchArticles({ categorySlug: cat.slug }),
+  });
   const Icon = cat.icon;
 
   return (
@@ -30,7 +35,9 @@ const Category = () => {
       <section className="py-12 md:py-16">
         <div className="container grid lg:grid-cols-[1fr_300px] gap-10">
           <div>
-            {posts.length === 0 ? (
+            {isLoading ? (
+              <div className="py-20 flex justify-center"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+            ) : posts.length === 0 ? (
               <p className="text-muted-foreground py-12 text-center">No articles in this category yet.</p>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2">
