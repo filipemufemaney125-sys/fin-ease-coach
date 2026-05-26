@@ -1,8 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X, Search, Cpu } from "lucide-react";
+import { Menu, X, Search, Cpu, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import NewsletterDialog from "./NewsletterDialog";
+import { useAuth } from "@/hooks/useAuth";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -16,6 +18,7 @@ const nav = [
 
 const SiteHeader = () => {
   const [open, setOpen] = useState(false);
+  const { isAdmin } = useAuth();
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between">
@@ -50,9 +53,14 @@ const SiteHeader = () => {
               <Search className="h-4 w-4" />
             </Button>
           </Link>
-          <Link to="/blog" className="hidden sm:inline-flex">
-            <Button variant="hero" size="sm">Subscribe</Button>
-          </Link>
+          {isAdmin && (
+            <Link to="/admin" className="hidden sm:inline-flex">
+              <Button variant="ghost" size="icon" aria-label="Admin"><LayoutDashboard className="h-4 w-4" /></Button>
+            </Link>
+          )}
+          <div className="hidden sm:inline-flex">
+            <NewsletterDialog trigger={<Button variant="hero" size="sm">Subscribe</Button>} />
+          </div>
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
