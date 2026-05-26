@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import PageShell from "@/components/site/PageShell";
 import SEO from "@/components/site/SEO";
 import { Input } from "@/components/ui/input";
@@ -9,10 +11,20 @@ import { Mail, Twitter } from "lucide-react";
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const onSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Message sent", { description: "We'll get back to you shortly." });
-    setForm({ name: "", email: "", message: "" });
+    setLoading(true);
+    try {
+      const { error } = await supabase.functions.invoke("submit-contact", { body: form });
+      if (error) throw error;
+      toast({ title: "Message sent", description: "We'll get back to you shortly." });
+      setForm({ name: "", email: "", message: "" });
+    } catch (err: any) {
+      toast({ title: "Failed to send", description: err?.message || "Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <PageShell>
@@ -41,7 +53,9 @@ const Contact = () => {
               <label className="text-sm font-medium" htmlFor="message">Message</label>
               <Textarea id="message" required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-2 bg-background" />
             </div>
-            <Button type="submit" variant="hero" className="w-full h-11">Send message</Button>
+            <Button type="submit" variant="hero" className="w-full h-11" disabled={loading}>
+              {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Sending...</> : "Send message"}
+            </Button>
           </form>
         </div>
       </section>
