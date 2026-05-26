@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
-import { posts } from "@/data/posts";
+import { useQuery } from "@tanstack/react-query";
 import { categories } from "@/data/categories";
+import { fetchArticles } from "@/lib/articles";
 
 const Sidebar = () => {
-  const popular = posts.slice(0, 4);
+  const { data: popular = [] } = useQuery({
+    queryKey: ["articles", "sidebar"],
+    queryFn: () => fetchArticles({ limit: 4 }),
+  });
   return (
     <aside className="space-y-8">
       <div className="rounded-xl border border-border bg-card p-5">
