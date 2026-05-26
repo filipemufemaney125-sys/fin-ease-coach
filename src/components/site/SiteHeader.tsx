@@ -9,6 +9,7 @@ const nav = [
   { to: "/blog", label: "Articles" },
   { to: "/category/ai-tools", label: "AI Tools" },
   { to: "/category/trading", label: "Trading" },
+  { to: "/ai-generator", label: "AI Generator" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
