@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import PageShell from "@/components/site/PageShell";
 import SEO from "@/components/site/SEO";
 import ArticleCard from "@/components/site/ArticleCard";
@@ -7,11 +8,15 @@ import Sidebar from "@/components/site/Sidebar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { categories } from "@/data/categories";
-import { posts } from "@/data/posts";
+import { fetchArticles } from "@/lib/articles";
 
 const Blog = () => {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<string | null>(null);
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ["articles", "all"],
+    queryFn: () => fetchArticles(),
+  });
 
   const filtered = useMemo(() => {
     return posts.filter((p) => {
@@ -19,7 +24,7 @@ const Blog = () => {
       const matchesCat = !active || p.category === active;
       return matchesQuery && matchesCat;
     });
-  }, [query, active]);
+  }, [query, active, posts]);
 
   return (
     <PageShell>
@@ -60,7 +65,9 @@ const Blog = () => {
               ))}
             </div>
 
-            {filtered.length === 0 ? (
+            {isLoading ? (
+              <div className="py-20 flex justify-center"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+            ) : filtered.length === 0 ? (
               <p className="text-muted-foreground py-12 text-center">No articles found.</p>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2">
