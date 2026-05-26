@@ -1,16 +1,31 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { Mail } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { Mail, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
-  const onSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    toast.success("Subscribed!", { description: "Check your inbox to confirm." });
-    setEmail("");
+    const trimmed = email.trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmed)) {
+      toast({ title: "Invalid email", variant: "destructive" });
+      return;
+    }
+    setLoading(true);
+    try {
+      const { error } = await supabase.functions.invoke("subscribe-newsletter", { body: { email: trimmed, source: "footer-cta" } });
+      if (error) throw error;
+      toast({ title: "Subscribed!", description: "Welcome to NextGen Moz." });
+      setEmail("");
+    } catch (err: any) {
+      toast({ title: "Subscription failed", description: err?.message || "Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <section className="py-20 md:py-28">
@@ -39,7 +54,9 @@ const Newsletter = () => {
               className="h-12 bg-background"
               aria-label="Email address"
             />
-            <Button type="submit" variant="hero" size="lg" className="h-12">Subscribe</Button>
+            <Button type="submit" variant="hero" size="lg" className="h-12" disabled={loading}>
+              {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Subscribing...</> : "Subscribe"}
+            </Button>
           </form>
           <p className="mt-4 text-xs text-muted-foreground">Join 12,000+ readers from 80+ countries.</p>
         </div>
