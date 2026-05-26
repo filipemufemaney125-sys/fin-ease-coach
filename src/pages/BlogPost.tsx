@@ -1,15 +1,25 @@
 import { useMemo } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
-import { Calendar, Clock, ArrowLeft, User } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, User, Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import PageShell from "@/components/site/PageShell";
 import SEO from "@/components/site/SEO";
 import Sidebar from "@/components/site/Sidebar";
 import ArticleCard from "@/components/site/ArticleCard";
-import { getPostBySlug, getRelatedPosts } from "@/data/posts";
+import { fetchArticleBySlug, fetchRelated } from "@/lib/articles";
 
 const BlogPost = () => {
   const { slug } = useParams();
-  const post = slug ? getPostBySlug(slug) : undefined;
+  const { data: post, isLoading } = useQuery({
+    queryKey: ["article", slug],
+    queryFn: () => fetchArticleBySlug(slug!),
+    enabled: !!slug,
+  });
+  const { data: related = [] } = useQuery({
+    queryKey: ["related", post?.slug],
+    queryFn: () => fetchRelated(post!),
+    enabled: !!post,
+  });
 
   const toc = useMemo(() => {
     if (!post) return [];
@@ -23,8 +33,14 @@ const BlogPost = () => {
       });
   }, [post]);
 
+  if (isLoading) {
+    return (
+      <PageShell>
+        <div className="py-32 flex justify-center"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+      </PageShell>
+    );
+  }
   if (!post) return <Navigate to="/blog" replace />;
-  const related = getRelatedPosts(post);
 
   const blocks = post.content.trim().split("\n\n").map((b) => b.trim());
 
