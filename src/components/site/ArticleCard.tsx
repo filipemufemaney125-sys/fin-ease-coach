@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Calendar, Clock } from "lucide-react";
-import type { Post } from "@/data/posts";
+import type { Article } from "@/lib/articles";
 
 interface Props {
-  post: Post;
+  post: Article;
   featured?: boolean;
 }
 
