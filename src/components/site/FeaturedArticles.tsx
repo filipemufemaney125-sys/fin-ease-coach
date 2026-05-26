@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
-import { posts } from "@/data/posts";
+import { ArrowUpRight, Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import ArticleCard from "./ArticleCard";
+import { fetchArticles } from "@/lib/articles";
 
 const FeaturedArticles = () => {
-  const featured = posts.slice(0, 5);
+  const { data: featured = [], isLoading } = useQuery({
+    queryKey: ["articles", "featured"],
+    queryFn: () => fetchArticles({ limit: 5 }),
+  });
   return (
     <section className="border-b border-border/60 py-20 md:py-28">
       <div className="container">
@@ -18,12 +22,16 @@ const FeaturedArticles = () => {
           </Link>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <ArticleCard post={featured[0]} featured />
-          {featured.slice(1).map((p) => (
-            <ArticleCard key={p.slug} post={p} />
-          ))}
-        </div>
+        {isLoading || featured.length === 0 ? (
+          <div className="py-20 flex justify-center"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <ArticleCard post={featured[0]} featured />
+            {featured.slice(1).map((p) => (
+              <ArticleCard key={p.slug} post={p} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
