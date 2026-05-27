@@ -1,5 +1,5 @@
 import { Navigate, NavLink, Outlet, Link } from "react-router-dom";
-import { Loader2, LayoutDashboard, FileText, Tags, Mail, Users, LogOut, Cpu } from "lucide-react";
+import { Loader2, LayoutDashboard, FileText, Tags, Mail, Users, LogOut, Cpu, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 const items = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/admin/articles", label: "Articles", icon: FileText },
+  { to: "/admin/ai-generate", label: "AI Generator", icon: Sparkles },
   { to: "/admin/categories", label: "Categories", icon: Tags },
   { to: "/admin/subscribers", label: "Subscribers", icon: Users },
   { to: "/admin/messages", label: "Messages", icon: Mail },

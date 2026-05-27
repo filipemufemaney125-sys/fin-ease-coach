@@ -19,6 +19,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminArticles from "./pages/admin/AdminArticles";
 import AdminArticleEdit from "./pages/admin/AdminArticleEdit";
+import AdminAIGenerate from "./pages/admin/AdminAIGenerate";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminSubscribers from "./pages/admin/AdminSubscribers";
 import AdminMessages from "./pages/admin/AdminMessages";
@@ -47,6 +48,7 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               <Route path="articles" element={<AdminArticles />} />
               <Route path="articles/:id" element={<AdminArticleEdit />} />
+              <Route path="ai-generate" element={<AdminAIGenerate />} />
               <Route path="categories" element={<AdminCategories />} />
               <Route path="subscribers" element={<AdminSubscribers />} />
               <Route path="messages" element={<AdminMessages />} />
