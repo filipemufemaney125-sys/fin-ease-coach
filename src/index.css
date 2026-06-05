@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,56 +6,56 @@
 
 @layer base {
   :root {
-    /* Dark futuristic theme - default */
-    --background: 222 47% 5%;
-    --foreground: 210 40% 96%;
+    /* TMCEL corporate light theme */
+    --background: 0 0% 100%;
+    --foreground: 220 15% 15%;
 
-    --card: 222 40% 8%;
-    --card-foreground: 210 40% 96%;
+    --surface: 0 0% 98%;
+    --surface-foreground: 220 15% 15%;
 
-    --popover: 222 40% 8%;
-    --popover-foreground: 210 40% 96%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 15%;
 
-    --primary: 210 100% 60%;
-    --primary-foreground: 222 47% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 15%;
 
-    --secondary: 222 30% 12%;
-    --secondary-foreground: 210 40% 96%;
+    /* TMCEL red */
+    --primary: 354 92% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 354 92% 38%;
 
-    --muted: 222 25% 14%;
-    --muted-foreground: 215 20% 65%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 15% 25%;
 
-    --accent: 210 100% 60%;
-    --accent-foreground: 222 47% 5%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 45%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --accent: 354 92% 96%;
+    --accent-foreground: 354 92% 35%;
 
-    --border: 222 25% 16%;
-    --input: 222 25% 16%;
-    --ring: 210 100% 60%;
+    --destructive: 0 84% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 354 92% 45%;
 
     --radius: 0.5rem;
 
-    --brand: 210 100% 60%;
-    --brand-glow: 195 100% 55%;
-
-    --sidebar-background: 222 40% 8%;
-    --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 210 100% 60%;
-    --sidebar-primary-foreground: 222 47% 5%;
-    --sidebar-accent: 222 25% 14%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 222 25% 16%;
-    --sidebar-ring: 210 100% 60%;
-
-    --font-display: 'Space Grotesk', sans-serif;
-    --font-body: 'Inter', sans-serif;
-  }
-
-  .dark {
-    --background: 222 47% 5%;
-    --foreground: 210 40% 96%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 15% 25%;
+    --sidebar-primary: 354 92% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 354 92% 38%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 354 92% 45%;
   }
 }
 
@@ -63,47 +63,21 @@
   * {
     @apply border-border;
   }
-
+  html, body, #root {
+    @apply h-full;
+  }
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-body);
+    @apply bg-secondary text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    @apply font-semibold tracking-tight text-foreground;
   }
 }
 
 @layer utilities {
-  .gradient-brand {
-    background: linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-glow)));
-  }
-
-  .gradient-dark {
-    background: linear-gradient(180deg, hsl(222 47% 5% / 0.4), hsl(222 47% 5% / 0.95));
-  }
-
-  .text-gradient-brand {
-    background: linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-glow)));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .shadow-glow {
-    box-shadow: 0 10px 40px -10px hsl(var(--brand) / 0.5);
-  }
-
-  .shadow-card {
-    box-shadow: 0 4px 24px -4px hsl(0 0% 0% / 0.4);
-  }
-
-  .grid-bg {
-    background-image:
-      linear-gradient(hsl(var(--border) / 0.4) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--border) / 0.4) 1px, transparent 1px);
-    background-size: 48px 48px;
+  .tmcel-gradient {
+    background: linear-gradient(135deg, hsl(354 92% 45%), hsl(354 92% 35%));
   }
 }
