@@ -1,63 +1,63 @@
-## Goal
-Turn NextGen Moz into a production-ready publication with newsletter, dynamic articles from DB, admin CRUD, functional contact form, and SEO/AdSense polish.
+## Fase 1 — Fundação do TMCEL CRM
 
-## Scope & Approach
+Sem cores oficiais fornecidas, assumo a paleta corporativa TMCEL: **vermelho `#E30613`** como primária, branco e cinzentos. Pode trocar depois.
 
-### 1. Database (Lovable Cloud)
-- `categories` (slug, name, description) — public read, admin write
-- `articles` (slug, title, excerpt, content, cover_url, category_id, author, published, published_at, tags[], seo_title, seo_description) — public read where `published=true`, admin write
-- `newsletter_subscribers` (email unique, status, created_at) — public insert only, admin read
-- `contact_messages` (name, email, message, created_at) — public insert, admin read
-- `user_roles` + `app_role` enum + `has_role()` security-definer function (admin role pattern)
-- Storage bucket `article-images` (public) with admin-only write
-- Seed categories + migrate the 6 hardcoded posts into DB
+### O que entrego nesta fase
 
-### 2. Authentication
-- Email/password signup + login at `/auth`
-- First user can self-promote to admin via a one-time bootstrap (or via a simple "claim admin if no admin exists" rule in trigger)
-- Protected `/admin/*` routes via `has_role(uid, 'admin')`
+1. **Limpeza do projeto**
+   - Remover todas as páginas/componentes do NextGen Moz (blog, AI Generator, admin antigo, newsletter, etc.).
+   - Manter Supabase, mas com schema novo (tabelas do blog continuam — não as apago, só deixam de ser usadas).
 
-### 3. Newsletter
-- "Subscribe" modal triggered from header/footer/Newsletter section
-- Edge function `subscribe-newsletter` validates + inserts (handles duplicates gracefully)
-- Toast feedback, loading state, success animation
+2. **Identidade visual TMCEL**
+   - Design system semântico no `index.css` + `tailwind.config.ts`: vermelho TMCEL, brancos, cinzentos claros, tokens para sidebar, cards, status (verde/âmbar/vermelho para KPIs).
+   - Tipografia limpa estilo CRM corporativo (Inter).
+   - Layout mobile-first com sidebar colapsável em desktop e bottom-nav em telemóvel.
 
-### 4. Articles
-- Refactor `Blog`, `BlogPost`, `Category`, `FeaturedArticles` to fetch from Supabase (replace `src/data/posts.ts` usage)
-- Keep search + category filtering, related posts, reading time calc
-- Dynamic SEO per article (title/description/OG via react-helmet-async)
+3. **Autenticação + perfis**
+   - Login email/password + recuperação de senha (`/login`, `/reset-password`).
+   - Tabela `profiles` (nome, número trabalhador, fotografia, email, estado).
+   - Enum `app_role`: `admin`, `delegado`, `assessor`, `gestora`.
+   - Tabela `user_roles` + função `has_role` (padrão seguro, sem recursão).
+   - Trigger que cria profile + role `gestora` por defeito ao registar; primeiro utilizador vira `admin`.
+   - Guards de rota por perfil.
 
-### 5. Admin Dashboard (`/admin`)
-- Articles list with create/edit/delete
-- Rich-ish editor (textarea + markdown preview, image upload to bucket)
-- Categories manager
-- Newsletter subscribers list (read-only export view)
-- Contact messages inbox
+4. **Gestão de Clientes (módulo completo)**
+   - Tabela `clients` com todos os campos pedidos: nº Gaia, código BSCS, NUIT, nome, tipo (enum: privado, estado, empresa_publica, pme, ong, singular), plataforma, estado, data de angariação, contactos, gestora atribuída.
+   - Páginas: lista (`/clientes`) com pesquisa + filtros, criar, editar, ver detalhe, eliminar.
+   - RLS: `gestora` vê só os seus clientes; `admin`/`delegado`/`assessor` veem todos. Só `admin` e a gestora dona podem editar.
 
-### 6. Contact form
-- Edge function `submit-contact` inserts into `contact_messages`
-- Validation (zod), rate-limit friendly, toast feedback
+5. **Dashboard inicial (`/`)**
+   - Cards: total de clientes, novos no ano, clientes ativos, clientes inativos.
+   - Gráfico simples de novos clientes por mês (Recharts).
+   - Os KPIs financeiros (receita, dívida, cobrança) aparecem na Fase 2 quando existirem as tabelas.
 
-### 7. SEO / AdSense
-- Add `react-helmet-async` provider + per-route SEO via existing `SEO` component (extend with OG image, canonical, JSON-LD Article)
-- Generate sitemap (script + `predev`/`prebuild`) listing static routes + DB articles
-- `robots.txt` already exists — keep
-- Ad placement slots (`<AdSlot>` placeholder component) in sidebar, mid-article, footer area
+6. **PWA**
+   - `manifest.webmanifest`, theme-color vermelho TMCEL, ícones, instalável no telemóvel. Sem service worker / offline (só quando pedir).
 
-### 8. UX polish
-- Loading skeletons on Blog/BlogPost
-- Smooth fade-in animations (already have utilities)
-- Fix nav links, mobile menu check
+7. **Layout principal**
+   - Sidebar com itens já no menu mas marcados "Em breve" para módulos da Fase 2+ (Serviços, Carteiras, Faturação, Dívidas, Cobranças, Relatórios, Utilizadores, Auditoria, Configurações).
+   - Top bar com perfil + logout + pesquisa global (UI por agora; backend de pesquisa entra na Fase 2).
 
-## Out of scope (call out)
-- Actual sending of emails (SMTP/Resend) — we store newsletter + contact in DB; can add Lovable Emails later if requested
-- Rich text editor (Tiptap) — using markdown textarea to keep scope sane
-- The existing AI Generator stays as-is (already functional)
+### Fases seguintes (não entregam nesta iteração)
 
-## Technical notes
-- New deps: `react-helmet-async` (SEO), `@uiw/react-md-editor` optional — will use plain textarea + react-markdown to avoid heavy deps
-- Migration is large but single — one approval
-- Will seed existing 6 posts into DB so site looks identical day one
+- **Fase 2:** Serviços + `client_services` + Faturação + Dívidas + Cobranças + KPIs financeiros + Aging.
+- **Fase 3:** Carteiras + transferências + modo férias + Gestão de Utilizadores (admin) + Metas.
+- **Fase 4:** Relatórios (PDF/Excel/Word) + Auditoria completa + Pesquisa global + Classificação de pagadores.
 
-## Confirmation needed
-This is a large build (~15-20 files + migration + 2 edge functions). Want me to proceed with everything above, or split into phases (e.g., Phase 1: DB + newsletter + contact + SEO; Phase 2: Admin dashboard)?
+### Detalhes técnicos
+
+- **Stack:** React + TS + Vite + Tailwind + shadcn (já instalado) + Recharts + react-router + Lovable Cloud (Supabase).
+- **Tabelas criadas nesta fase:** `profiles`, `user_roles`, `clients`. Enums: `app_role`, `client_type`, `client_status`.
+- **RLS:** activado em todas; políticas por papel via `has_role`. Política restritiva já corrigida para impedir auto-promoção a admin (já feito na iteração anterior).
+- **Storage:** bucket `avatars` (público) para fotos de utilizador.
+- **Rotas principais:**
+  ```text
+  /login                /reset-password
+  /                     dashboard
+  /clientes             lista + filtros
+  /clientes/novo
+  /clientes/:id         detalhe/editar
+  /perfil               perfil do utilizador
+  ```
+
+Confirmo e avanço com a Fase 1?

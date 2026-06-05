@@ -112,6 +112,69 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          acquisition_date: string | null
+          address: string | null
+          bscs_code: string | null
+          client_type: Database["public"]["Enums"]["client_type"]
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          created_by: string | null
+          gaia_number: string | null
+          id: string
+          manager_id: string | null
+          name: string
+          notes: string | null
+          nuit: string | null
+          platform: string | null
+          status: Database["public"]["Enums"]["client_status"]
+          updated_at: string
+        }
+        Insert: {
+          acquisition_date?: string | null
+          address?: string | null
+          bscs_code?: string | null
+          client_type?: Database["public"]["Enums"]["client_type"]
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          gaia_number?: string | null
+          id?: string
+          manager_id?: string | null
+          name: string
+          notes?: string | null
+          nuit?: string | null
+          platform?: string | null
+          status?: Database["public"]["Enums"]["client_status"]
+          updated_at?: string
+        }
+        Update: {
+          acquisition_date?: string | null
+          address?: string | null
+          bscs_code?: string | null
+          client_type?: Database["public"]["Enums"]["client_type"]
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          gaia_number?: string | null
+          id?: string
+          manager_id?: string | null
+          name?: string
+          notes?: string | null
+          nuit?: string | null
+          platform?: string | null
+          status?: Database["public"]["Enums"]["client_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
@@ -163,6 +226,39 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          active: boolean
+          created_at: string
+          email: string
+          employee_number: string | null
+          full_name: string
+          id: string
+          photo_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          email: string
+          employee_number?: string | null
+          full_name?: string
+          id: string
+          photo_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          email?: string
+          employee_number?: string | null
+          full_name?: string
+          id?: string
+          photo_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -198,7 +294,21 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "editor" | "user"
+      app_role:
+        | "admin"
+        | "editor"
+        | "user"
+        | "delegado"
+        | "assessor"
+        | "gestora"
+      client_status: "ativo" | "inativo" | "suspenso"
+      client_type:
+        | "privado"
+        | "estado"
+        | "empresa_publica"
+        | "pme"
+        | "ong"
+        | "singular"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -326,7 +436,16 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "editor", "user"],
+      app_role: ["admin", "editor", "user", "delegado", "assessor", "gestora"],
+      client_status: ["ativo", "inativo", "suspenso"],
+      client_type: [
+        "privado",
+        "estado",
+        "empresa_publica",
+        "pme",
+        "ong",
+        "singular",
+      ],
     },
   },
 } as const
